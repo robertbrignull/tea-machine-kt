@@ -18,4 +18,13 @@
         <servlet-name>TeaServlet</servlet-name>
         <url-pattern>/api/brewing</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AuthServlet</servlet-name>
+        <servlet-class>uk.co.brignull.tea.auth.AuthServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthServlet</servlet-name>
+        <url-pattern>/auth/*</url-pattern>
+    </servlet-mapping>
 </web-app>

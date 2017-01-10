@@ -12,7 +12,7 @@
 
     <servlet>
         <servlet-name>TeaServlet</servlet-name>
-        <servlet-class>uk.co.brignull.tea.TeaMachine</servlet-class>
+        <servlet-class>uk.co.brignull.tea.api.brewing.BrewingServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>TeaServlet</servlet-name>

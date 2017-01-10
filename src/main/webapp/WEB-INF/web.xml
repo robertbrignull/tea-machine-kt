@@ -16,6 +16,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>TeaServlet</servlet-name>
-        <url-pattern>/brewing</url-pattern>
+        <url-pattern>/api/brewing</url-pattern>
     </servlet-mapping>
 </web-app>

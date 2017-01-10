@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+
+    <display-name>Tea Machine</display-name>
+    <description>
+        A Slack app to remind you to stop your tea from over-brewing.
+    </description>
+
+    <servlet>
+        <servlet-name>TeaServlet</servlet-name>
+        <servlet-class>uk.co.brignull.tea.TeaMachine</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TeaServlet</servlet-name>
+        <url-pattern>/brewing</url-pattern>
+    </servlet-mapping>
+</web-app>

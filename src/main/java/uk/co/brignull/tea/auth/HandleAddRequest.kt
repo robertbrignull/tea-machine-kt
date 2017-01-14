@@ -1,7 +1,7 @@
 package uk.co.brignull.tea.auth
 
-import com.google.gson.Gson
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.apache.http.client.fluent.Request
 import uk.co.brignull.tea.model.OfyService
 import javax.servlet.http.HttpServletRequest
@@ -34,7 +34,7 @@ fun handleAddRequest(req: HttpServletRequest, resp: HttpServletResponse) {
             (if (queryString["redirect_uri"] != null) "&redirect_uri=" + queryString["redirect_uri"] else "")
 
     val response = Request.Get(accessURL).execute().returnContent().asString()
-    val data = Gson().fromJson(response, AuthResponse::class.java)
+    val data = jacksonObjectMapper().readValue(response, AuthResponse::class.java)
     if (data == null) {
         resp.sendError(500, "Invalid response from authorization server")
         return
@@ -46,21 +46,9 @@ fun handleAddRequest(req: HttpServletRequest, resp: HttpServletResponse) {
     resp.sendRedirect("/?success=true")
 }
 
-class AuthResponse {
-    @SerializedName("access_token")
-    val accessToken: String?
-    val scope: String?
-    @SerializedName("team_name")
-    val teamName: String?
-    @SerializedName("team_id")
-    val teamID: String?
-
-    constructor() : this(null, null, null, null)
-
-    constructor(accessToken: String?, scope: String?, teamName: String?, teamID: String?) {
-        this.accessToken = accessToken
-        this.scope = scope
-        this.teamName = teamName
-        this.teamID = teamID
-    }
-}
+data class AuthResponse(
+        @JsonProperty("access_token") val accessToken: String?,
+        @JsonProperty("scope") val scope: String?,
+        @JsonProperty("team_name") val teamName: String?,
+        @JsonProperty("team_id") val teamID: String?
+)

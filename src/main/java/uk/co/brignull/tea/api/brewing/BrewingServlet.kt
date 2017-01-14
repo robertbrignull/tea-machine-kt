@@ -1,5 +1,7 @@
 package uk.co.brignull.tea.api.brewing
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.appengine.api.taskqueue.DeferredTask
 import com.google.appengine.api.taskqueue.QueueFactory
 import com.google.appengine.api.taskqueue.TaskOptions
@@ -51,10 +53,16 @@ private class ReminderTask(val responseURL: String) : DeferredTask {
     override fun run() {
         val log = Logger.getLogger(ReminderTask::class.qualifiedName)!!
 
-        val message = "{ \"text\": \"Your tea is ready!\" }"
-        log.info("making post request to $responseURL with content $message")
+        val message = "Your tea is ready!"
+        val json = jacksonObjectMapper().writeValueAsString(Message(message))
+
+        log.info("making post request to $responseURL with content $json")
         Request.Post(responseURL)
-                .body(StringEntity(message, ContentType.APPLICATION_JSON))
+                .body(StringEntity(json, ContentType.APPLICATION_JSON))
                 .execute().returnContent().asString()
     }
 }
+
+data class Message(
+        @JsonProperty("text") val text: String
+)

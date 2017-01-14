@@ -1,6 +1,7 @@
 package uk.co.brignull.tea.servlet
 
 import uk.co.brignull.tea.servlet.api.ApiBrew
+import uk.co.brignull.tea.servlet.api.ApiPing
 import uk.co.brignull.tea.servlet.auth.AuthAdd
 import java.io.IOException
 import javax.servlet.ServletException
@@ -11,7 +12,8 @@ import javax.servlet.http.HttpServletResponse
 class RootServlet : HttpServlet() {
     private val getHandlers = mapOf<String, RequestHandler>(
             Pair("/", RootPage()),
-            Pair("/auth/add", AuthAdd())
+            Pair("/auth/add", AuthAdd()),
+            Pair("/api/ping", ApiPing())
     )
 
     private val postHandlers = mapOf<String, RequestHandler>(

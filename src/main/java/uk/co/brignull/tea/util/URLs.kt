@@ -1,7 +1,5 @@
 package uk.co.brignull.tea.util
 
-val authRedirectURL = "https://tea-machine.appspot.com/auth/add"
-
 fun parseQueryString(queryString: String?): Map<String, String> {
     if (queryString == null)
         return emptyMap()

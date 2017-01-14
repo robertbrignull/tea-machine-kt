@@ -3,7 +3,6 @@ package uk.co.brignull.tea
 import com.mitchellbosecke.pebble.PebbleEngine
 import uk.co.brignull.tea.model.loadSingletonInstance
 import uk.co.brignull.tea.model.objects.OAuthConfiguration
-import uk.co.brignull.tea.util.authRedirectURL
 import uk.co.brignull.tea.util.parseQueryString
 import java.io.IOException
 import javax.servlet.ServletException
@@ -22,7 +21,7 @@ class RootServlet : HttpServlet() {
 
         val context = mapOf(
                 Pair("client_id", oauthConfig.clientId),
-                Pair("redirect_uri", authRedirectURL),
+                Pair("redirect_uri", "https://tea-machine.appspot.com/auth/add"),
                 Pair("success", queryString["success"] == "true")
         )
 

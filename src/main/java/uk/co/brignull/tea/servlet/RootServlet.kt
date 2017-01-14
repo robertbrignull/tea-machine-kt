@@ -1,9 +1,7 @@
 package uk.co.brignull.tea.servlet
 
-import com.mitchellbosecke.pebble.PebbleEngine
-import uk.co.brignull.tea.model.loadSingletonInstance
-import uk.co.brignull.tea.model.objects.OAuthConfiguration
-import uk.co.brignull.tea.util.parseQueryString
+import uk.co.brignull.tea.servlet.api.ApiBrew
+import uk.co.brignull.tea.servlet.auth.AuthAdd
 import java.io.IOException
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServlet
@@ -11,20 +9,35 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class RootServlet : HttpServlet() {
+    private val getHandlers = mapOf<String, RequestHandler>(
+            Pair("/", RootPage()),
+            Pair("/auth/add", AuthAdd())
+    )
+
+    private val postHandlers = mapOf<String, RequestHandler>(
+            Pair("/api/brewing", ApiBrew())
+    )
+
     @Throws(ServletException::class, IOException::class)
     public override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {
-        val engine = PebbleEngine.Builder().build()
-        val compiledTemplate = engine.getTemplate("templates/root.html")
+        handleRequest(req, resp, getHandlers)
+    }
 
-        val oauthConfig = loadSingletonInstance(OAuthConfiguration::class)
-        val queryString = parseQueryString(req.queryString)
+    @Throws(ServletException::class, IOException::class)
+    public override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
+        handleRequest(req, resp, postHandlers)
+    }
 
-        val context = mapOf(
-                Pair("client_id", oauthConfig.clientId),
-                Pair("redirect_uri", "https://tea-machine.appspot.com/auth/add"),
-                Pair("success", queryString["success"] == "true")
-        )
+    private fun handleRequest(req: HttpServletRequest, resp: HttpServletResponse, handlers: Map<String, RequestHandler>) {
+        val path = req.requestURI.substring(req.contextPath.length)
+        for ((key, value) in handlers) {
+            if (key == path) {
+                value.handleRequest(req, resp)
+                return
+            }
+        }
 
-        compiledTemplate.evaluate(resp.writer, context)
+        resp.sendError(404, "Path " + req.pathInfo + " not recognised. Expected one of ["
+                + handlers.keys.joinToString() + "].")
     }
 }

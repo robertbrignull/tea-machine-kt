@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletResponse
 class ApiBrew : RequestHandler {
     val log = Logger.getLogger(ApiBrew::class.qualifiedName)!!
 
+    private val defaultBrewingMinutes = 3
+
     override fun handleRequest(req: HttpServletRequest, resp: HttpServletResponse) {
         val data = parseQueryString(req.reader.readText())
 
@@ -30,19 +32,29 @@ class ApiBrew : RequestHandler {
             return
         }
 
-        val brewingMinutes = 3L
+        val brewingMinutes = decodeMinutes(data["text"])
 
         scheduleTask(URLDecoder.decode(data["response_url"]!!, Charsets.UTF_8.name()), brewingMinutes)
 
         resp.writer.println("Will remind you in $brewingMinutes minutes")
     }
 
-    private fun scheduleTask(responseURL: String, brewingMinutes: Long) {
+    private fun decodeMinutes(text: String?): Int {
+        if (text == null)
+            return defaultBrewingMinutes
+        try {
+            return text.toInt()
+        } catch (e: NumberFormatException) {
+            return defaultBrewingMinutes
+        }
+    }
+
+    private fun scheduleTask(responseURL: String, brewingMinutes: Int) {
         log.info(responseURL)
         val queue = QueueFactory.getDefaultQueue()
         queue.add(TaskOptions.Builder
                 .withPayload(ReminderTask(responseURL))
-                .countdownMillis(brewingMinutes * 60 * 1000))
+                .countdownMillis(brewingMinutes * 60 * 1000L))
     }
 
     private class ReminderTask(val responseURL: String) : DeferredTask {

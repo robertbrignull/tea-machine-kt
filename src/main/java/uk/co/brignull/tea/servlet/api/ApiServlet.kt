@@ -1,4 +1,4 @@
-package uk.co.brignull.tea.api
+package uk.co.brignull.tea.servlet.api
 
 import java.io.IOException
 import javax.servlet.ServletException

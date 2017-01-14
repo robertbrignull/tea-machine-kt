@@ -1,4 +1,4 @@
-package uk.co.brignull.tea.auth
+package uk.co.brignull.tea.servlet.auth
 
 import java.io.IOException
 import javax.servlet.ServletException

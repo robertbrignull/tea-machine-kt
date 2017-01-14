@@ -1,4 +1,4 @@
-package uk.co.brignull.tea.api
+package uk.co.brignull.tea.servlet.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -16,7 +16,7 @@ import java.util.logging.Logger
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-private val log = Logger.getLogger("uk.co.brignull.tea.api.brewing")!!
+private val log = Logger.getLogger("uk.co.brignull.tea.servlet.api.brewing")!!
 
 fun handleBrewingRequest(req: HttpServletRequest, resp: HttpServletResponse) {
     val data = parseQueryString(req.reader.readText())

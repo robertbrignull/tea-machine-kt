@@ -1,4 +1,4 @@
-package uk.co.brignull.tea.auth
+package uk.co.brignull.tea.servlet.auth
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper

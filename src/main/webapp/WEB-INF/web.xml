@@ -21,7 +21,7 @@
 
     <servlet>
         <servlet-name>TeaServlet</servlet-name>
-        <servlet-class>uk.co.brignull.tea.api.ApiServlet</servlet-class>
+        <servlet-class>uk.co.brignull.tea.servlet.api.ApiServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>TeaServlet</servlet-name>
@@ -30,7 +30,7 @@
 
     <servlet>
         <servlet-name>AuthServlet</servlet-name>
-        <servlet-class>uk.co.brignull.tea.auth.AuthServlet</servlet-class>
+        <servlet-class>uk.co.brignull.tea.servlet.auth.AuthServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AuthServlet</servlet-name>
@@ -39,7 +39,7 @@
 
     <servlet>
         <servlet-name>RootServlet</servlet-name>
-        <servlet-class>uk.co.brignull.tea.RootServlet</servlet-class>
+        <servlet-class>uk.co.brignull.tea.servlet.RootServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RootServlet</servlet-name>

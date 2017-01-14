@@ -1,4 +1,4 @@
-package uk.co.brignull.tea
+package uk.co.brignull.tea.servlet
 
 import com.mitchellbosecke.pebble.PebbleEngine
 import uk.co.brignull.tea.model.loadSingletonInstance

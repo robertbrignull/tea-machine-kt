@@ -2,6 +2,7 @@ package uk.co.brignull.tea.auth
 
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import org.apache.http.client.fluent.Request
 import uk.co.brignull.tea.model.OfyService
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -10,9 +11,6 @@ import uk.co.brignull.tea.model.loadSingletonInstance
 import uk.co.brignull.tea.model.objects.AuthUser
 import uk.co.brignull.tea.model.objects.OAuthConfiguration
 import uk.co.brignull.tea.util.parseQueryString
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
 
 fun handleAddRequest(req: HttpServletRequest, resp: HttpServletResponse) {
     val config = loadSingletonInstance(OAuthConfiguration::class)
@@ -29,16 +27,14 @@ fun handleAddRequest(req: HttpServletRequest, resp: HttpServletResponse) {
         return
     }
 
-    val accessURL = URL("https://slack.com/api/oauth.access"
-            + "?client_id=" + config.clientId
-            + "&client_secret=" + config.clientSecret
-            + "&code=" + queryString["code"]
-            + (if (queryString["redirect_uri"] != null) "&redirect_uri=" + queryString["redirect_uri"] else ""))
+    val accessURL = "https://slack.com/api/oauth.access" +
+            "?client_id=" + config.clientId +
+            "&client_secret=" + config.clientSecret +
+            "&code=" + queryString["code"] +
+            (if (queryString["redirect_uri"] != null) "&redirect_uri=" + queryString["redirect_uri"] else "")
 
-    val conn = accessURL.openConnection() as HttpURLConnection
-    conn.requestMethod = "GET"
-
-    val data = Gson().fromJson(InputStreamReader(conn.inputStream), AuthResponse::class.java)
+    val response = Request.Get(accessURL).execute().returnContent().asString()
+    val data = Gson().fromJson(response, AuthResponse::class.java)
     if (data == null) {
         resp.sendError(500, "Invalid response from authorization server")
         return

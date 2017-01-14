@@ -21,7 +21,7 @@
 
     <servlet>
         <servlet-name>TeaServlet</servlet-name>
-        <servlet-class>uk.co.brignull.tea.api.brewing.BrewingServlet</servlet-class>
+        <servlet-class>uk.co.brignull.tea.api.ApiServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>TeaServlet</servlet-name>

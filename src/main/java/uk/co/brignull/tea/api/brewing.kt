@@ -1,4 +1,4 @@
-package uk.co.brignull.tea.api.brewing
+package uk.co.brignull.tea.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -11,42 +11,36 @@ import org.apache.http.entity.StringEntity
 import uk.co.brignull.tea.model.loadSingletonInstance
 import uk.co.brignull.tea.model.objects.OAuthConfiguration
 import uk.co.brignull.tea.util.parseQueryString
-import java.io.IOException
 import java.net.URLDecoder
 import java.util.logging.Logger
-import javax.servlet.ServletException
-import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class BrewingServlet : HttpServlet() {
-    val log = Logger.getLogger(BrewingServlet::class.qualifiedName)!!
+private val log = Logger.getLogger("uk.co.brignull.tea.api.brewing")!!
 
-    @Throws(ServletException::class, IOException::class)
-    public override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
-        val data = parseQueryString(req.reader.readText())
+fun handleBrewingRequest(req: HttpServletRequest, resp: HttpServletResponse) {
+    val data = parseQueryString(req.reader.readText())
 
-        val config = loadSingletonInstance(OAuthConfiguration::class)
+    val config = loadSingletonInstance(OAuthConfiguration::class)
 
-        if (data["token"] != config.verificationToken) {
-            resp.sendError(400, "verification token incorrect")
-            return
-        }
-
-        val brewingMinutes = 3L
-
-        scheduleTask(URLDecoder.decode(data["response_url"]!!, Charsets.UTF_8.name()), brewingMinutes)
-
-        resp.writer.println("Will remind you in $brewingMinutes minutes")
+    if (data["token"] != config.verificationToken) {
+        resp.sendError(400, "verification token incorrect")
+        return
     }
 
-    private fun scheduleTask(responseURL : String, brewingMinutes: Long) {
-        log.info(responseURL)
-        val queue = QueueFactory.getDefaultQueue()
-        queue.add(TaskOptions.Builder
-                .withPayload(ReminderTask(responseURL))
-                .countdownMillis(brewingMinutes * 60 * 1000))
-    }
+    val brewingMinutes = 3L
+
+    scheduleTask(URLDecoder.decode(data["response_url"]!!, Charsets.UTF_8.name()), brewingMinutes)
+
+    resp.writer.println("Will remind you in $brewingMinutes minutes")
+}
+
+private fun scheduleTask(responseURL : String, brewingMinutes: Long) {
+    log.info(responseURL)
+    val queue = QueueFactory.getDefaultQueue()
+    queue.add(TaskOptions.Builder
+            .withPayload(ReminderTask(responseURL))
+            .countdownMillis(brewingMinutes * 60 * 1000))
 }
 
 private class ReminderTask(val responseURL: String) : DeferredTask {
@@ -63,6 +57,6 @@ private class ReminderTask(val responseURL: String) : DeferredTask {
     }
 }
 
-data class Message(
+private data class Message(
         @JsonProperty("text") val text: String
 )

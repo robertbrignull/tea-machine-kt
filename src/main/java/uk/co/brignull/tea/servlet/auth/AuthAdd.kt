@@ -1,5 +1,6 @@
 package uk.co.brignull.tea.servlet.auth
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.apache.http.client.fluent.Request
@@ -47,6 +48,7 @@ class AuthAdd : RequestHandler {
         resp.sendRedirect("/?success=true")
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private data class AuthResponse(
             @JsonProperty("access_token") val accessToken: String?,
             @JsonProperty("scope") val scope: String?,

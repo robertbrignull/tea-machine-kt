@@ -1,6 +1,10 @@
 package uk.co.brignull.tea
 
 import com.mitchellbosecke.pebble.PebbleEngine
+import uk.co.brignull.tea.model.loadSingletonInstance
+import uk.co.brignull.tea.model.objects.OAuthConfiguration
+import uk.co.brignull.tea.util.authRedirectURL
+import uk.co.brignull.tea.util.parseQueryString
 import java.io.IOException
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServlet
@@ -13,8 +17,14 @@ class RootServlet : HttpServlet() {
         val engine = PebbleEngine.Builder().build()
         val compiledTemplate = engine.getTemplate("templates/root.html")
 
-        val context = mutableMapOf<String, Any>()
-        context.put("client_id", "64369940551.124605742784")
+        val oauthConfig = loadSingletonInstance(OAuthConfiguration::class)
+        val queryString = parseQueryString(req.queryString)
+
+        val context = mapOf(
+                Pair("client_id", oauthConfig.clientId),
+                Pair("redirect_uri", authRedirectURL),
+                Pair("success", queryString["success"] == "true")
+        )
 
         compiledTemplate.evaluate(resp.writer, context)
     }

@@ -10,6 +10,15 @@
         A Slack app to remind you to stop your tea from over-brewing.
     </description>
 
+    <filter>
+        <filter-name>ObjectifyFilter</filter-name>
+        <filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ObjectifyFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>TeaServlet</servlet-name>
         <servlet-class>uk.co.brignull.tea.api.brewing.BrewingServlet</servlet-class>

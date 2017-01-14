@@ -6,13 +6,15 @@ import com.googlecode.objectify.annotation.Id
 @Entity
 class AuthUser {
     @Id var teamName: String?
+    var teamID: String?
     var accessToken: String?
     var scope: String?
 
-    constructor() : this(null, null, null)
+    constructor() : this(null, null, null, null)
 
-    constructor(teamName: String?, accessToken: String?, scope: String?) {
+    constructor(teamName: String?, teamID: String?, accessToken: String?, scope: String?) {
         this.teamName = teamName
+        this.teamID = teamID
         this.accessToken = accessToken
         this.scope = scope
     }

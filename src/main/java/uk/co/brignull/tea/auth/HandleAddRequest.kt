@@ -44,7 +44,7 @@ fun handleAddRequest(req: HttpServletRequest, resp: HttpServletResponse) {
         return
     }
 
-    val newUser = AuthUser(data.teamName, data.accessToken, data.scope)
+    val newUser = AuthUser(data.teamName, data.teamID, data.accessToken, data.scope)
     OfyService.ofy().save().entity(newUser).now()
 
     resp.sendRedirect("/?success=true")
@@ -56,6 +56,7 @@ class AuthResponse {
     val scope: String?
     @SerializedName("team_name")
     val teamName: String?
+    @SerializedName("team_id")
     val teamID: String?
 
     constructor() : this(null, null, null, null)

@@ -50,11 +50,11 @@ class BrewingServlet : HttpServlet() {
 private class ReminderTask(val responseURL: String) : DeferredTask {
     override fun run() {
         val log = Logger.getLogger(ReminderTask::class.qualifiedName)!!
+
         val message = "{ \"text\": \"Your tea is ready!\" }"
         log.info("making post request to $responseURL with content $message")
-        val response = Request.Post(responseURL)
+        Request.Post(responseURL)
                 .body(StringEntity(message, ContentType.APPLICATION_JSON))
                 .execute().returnContent().asString()
-        log.info("response = " + response)
     }
 }

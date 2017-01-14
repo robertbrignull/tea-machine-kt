@@ -49,7 +49,7 @@ class ApiBrew : RequestHandler {
         override fun run() {
             val log = Logger.getLogger(ReminderTask::class.qualifiedName)!!
 
-            val message = "Your tea is ready!"
+            val message = ":tea: Your tea is ready!"
             val json = jacksonObjectMapper().writeValueAsString(Message(message))
 
             log.info("making post request to $responseURL with content $json")

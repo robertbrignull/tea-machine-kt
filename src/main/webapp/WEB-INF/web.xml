@@ -22,6 +22,7 @@
     <servlet>
         <servlet-name>RootServlet</servlet-name>
         <servlet-class>uk.co.brignull.tea.servlet.RootServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>RootServlet</servlet-name>

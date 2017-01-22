@@ -6,4 +6,7 @@
     <system-properties>
         <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
     </system-properties>
+    <automatic-scaling>
+        <min-pending-latency>2s</min-pending-latency>
+    </automatic-scaling>
 </appengine-web-app>

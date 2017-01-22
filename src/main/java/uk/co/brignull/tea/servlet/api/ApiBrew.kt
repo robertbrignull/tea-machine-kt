@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.appengine.api.taskqueue.DeferredTask
 import com.google.appengine.api.taskqueue.QueueFactory
 import com.google.appengine.api.taskqueue.TaskOptions
+import com.google.appengine.repackaged.com.google.api.client.http.HttpResponseException
 import org.apache.http.client.fluent.Request
 import org.apache.http.entity.ContentType
 import org.apache.http.entity.StringEntity
@@ -65,9 +66,15 @@ class ApiBrew : RequestHandler {
             val json = jacksonObjectMapper().writeValueAsString(Message(message))
 
             log.info("making post request to $responseURL with content $json")
-            Request.Post(responseURL)
-                    .body(StringEntity(json, ContentType.APPLICATION_JSON))
-                    .execute().returnContent().asString()
+            try {
+                Request.Post(responseURL)
+                        .body(StringEntity(json, ContentType.APPLICATION_JSON))
+                        .execute().returnContent().asString()
+            } catch (e: HttpResponseException) {
+                if (e.statusCode == 404)
+                    log.warning("Posting failed with 404")
+                else throw e
+            }
         }
     }
 

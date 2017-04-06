@@ -3,6 +3,6 @@
     <cron>
         <url>/api/ping</url>
         <description>Keep an instance alive</description>
-        <schedule>every 5 minutes</schedule>
+        <schedule>every 2 minutes</schedule>
     </cron>
 </cronentries>
